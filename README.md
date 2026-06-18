@@ -17,6 +17,11 @@ flips to *degraded* or *outage*. The visitor's operator is auto-detected from th
 public IP's ASN, so reports are attributed cleanly without anyone picking from a list.
 
 ---
+## screenshots
+
+<img width="1794" height="1430" alt="image" src="https://github.com/user-attachments/assets/acabde62-b8db-4e61-96d8-878e00975e9b" />
+
+
 
 ## Quickstart
 
