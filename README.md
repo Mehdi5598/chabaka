@@ -1,4 +1,4 @@
-# Chabaka — Algeria internet status
+# Chabaka  Algeria internet status
 
 A crowdsourced, real-time map of internet outages and slowdowns across Algeria's
 four main operators (**Algérie Télécom, Mobilis, Djezzy, Ooredoo**), broken down
@@ -109,30 +109,6 @@ secret `IP_SALT`.
 
 ---
 
-## Deploy (free VPS)
-
-1. Point a small VPS (Oracle Cloud Always Free ARM works well) at this repo.
-2. `cp .env.example .env`, set a real `IP_SALT` and `CORS_ORIGINS=https://yourdomain`.
-3. `docker compose up -d --build`.
-4. Put Caddy/Nginx + TLS in front of port 8080 (or expose 8080 behind Cloudflare).
-
-> Self-hosting an Algérie-Télécom reliability monitor *on* Algérie Télécom is funny
-> but bad for uptime — keep the public instance abroad.
-
----
-
-## Roadmap
-
-- **Ground truth from your own probes.** Feed your existing Prometheus / Blackbox /
-  SmokePing results into `/api/measurement` so the map has authoritative lines, not
-  just visitor checks.
-- **Telegram alerts.** Push "Djezzy down in Algiers" when an operator flips to outage.
-- **Downloadable agent.** A tiny container power users run for continuous probing.
-- **Hardening at scale.** Move rate-limiting + dedup to Redis; add a lightweight
-  captcha / proof-of-work on reports.
-- **Sharper ISP detection.** Add the mobile operators' confirmed ASNs to
-  `ASN_OVERRIDES` in `isp.py` (Algérie Télécom's is already there).
-- **Data retention.** Nightly job to drop raw rows older than N days (keep rollups).
 
 Map data: [fr33dz/Algeria-geojson](https://github.com/fr33dz/Algeria-geojson),
 simplified. Operator detection via ip-api.com.
