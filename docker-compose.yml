@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: outage
+      POSTGRES_PASSWORD: outage
+      POSTGRES_DB: outage
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U outage"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://outage:outage@db:5432/outage
+      IP_SALT: ${IP_SALT:-please-change-this-salt}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      # Spike-detection tuning (optional — see README)
+      WINDOW_MIN: ${WINDOW_MIN:-15}
+      OUTAGE_ABS: ${OUTAGE_ABS:-10}
+      DEGRADED_ABS: ${DEGRADED_ABS:-4}
+    depends_on:
+      db:
+        condition: service_healthy
+    # Exposed for direct API access + interactive docs at http://localhost:8000/docs
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  pgdata:
